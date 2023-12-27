@@ -163,7 +163,6 @@ type
     procedure InternalInsert(aNode: PRBTreeNode); overload;
     procedure DisconnectNode(aNode: PRBTreeNode);
 
-    procedure DoUpdateNode(aNode: PRBTreeNode; aValue: Pointer); virtual;
     function DoCompare(aPtr1, aPtr2: Pointer): PtrInt; virtual;
     function GetRoot: PRBTreeNode;
 
@@ -215,19 +214,19 @@ type
     Key: string;
   end;
 
-  PStringRBTreeNode = ^TStringRBTreeNode;
+  PRBTreeStringNode = ^TRBTreeStringNode;
 
-  { TStringRBTreeNode 字符串键节点 }
-  TStringRBTreeNode = record
-    Left: PStringRBTreeNode;
-    Right: PStringRBTreeNode;
-    Parent: PStringRBTreeNode;
+  { TRBTreeStringNode 字符串键节点 }
+  TRBTreeStringNode = record
+    Left: PRBTreeStringNode;
+    Right: PRBTreeStringNode;
+    Parent: PRBTreeStringNode;
     Color: byte;
     Key: PStringKey;
     Value: Pointer;
   end;
 
-procedure DisposeStringRBTreeNode(var aNode: PStringRBTreeNode); inline;
+procedure DisposeStringRBTreeNode(var aNode: PRBTreeStringNode); inline;
 
 type
 
@@ -253,68 +252,68 @@ type
     property HashCB: THashCB read GetHashCB;
   end;
 
-  { TStringRBTreeNodeEnumerator }
+  { TRBTreeStringNodeEnumerator }
 
-  TStringRBTreeNodeEnumerator = class(TRBTreeNodeEnumerator)
+  TRBTreeStringNodeEnumerator = class(TRBTreeNodeEnumerator)
   private
-    function GetCurrent: PStringRBTreeNode;
+    function GetCurrent: PRBTreeStringNode;
   public
-    property Current: PStringRBTreeNode read GetCurrent;
+    property Current: PRBTreeStringNode read GetCurrent;
   end;
 
 
   { IStringRBTree }
 
   IStringRBTree = interface(IStringRBTreeBase)
-    function GetRoot: PStringRBTreeNode;
+    function GetRoot: PRBTreeStringNode;
 
     { 插入节点 }
-    function Insert(const aKey: string; aValue: Pointer): PStringRBTreeNode;
+    function Insert(const aKey: string; aValue: Pointer): PRBTreeStringNode;
 
     { 查找 }
-    function Find(aRoot: PStringRBTreeNode; const aKey: string): PStringRBTreeNode; overload;
-    function Find(const aKey: string): PStringRBTreeNode; overload;
+    function Find(aRoot: PRBTreeStringNode; const aKey: string): PRBTreeStringNode; overload;
+    function Find(const aKey: string): PRBTreeStringNode; overload;
 
     { 通过Key从红黑树中移除节点并返回该节点 }
-    function RemoveNode(aRoot: PStringRBTreeNode; const aKey: string): PStringRBTreeNode; overload;
-    function RemoveNode(const aKey: string): PStringRBTreeNode; overload;
+    function RemoveNode(aRoot: PRBTreeStringNode; const aKey: string): PRBTreeStringNode; overload;
+    function RemoveNode(const aKey: string): PRBTreeStringNode; overload;
 
     { 通过Key从红黑树中移除并释放该节点 返回该键的值 }
-    function Remove(aRoot: PStringRBTreeNode; const aKey: string): Pointer; overload;
+    function Remove(aRoot: PRBTreeStringNode; const aKey: string): Pointer; overload;
     function Remove(const aKey: string): Pointer; overload;
 
     { 从红黑树删除指定节点 todo: 此接口本不应该公开,某种性能优化需求保留了它,不要滥用 }
-    procedure Delete(aNode: PStringRBTreeNode);
+    procedure Delete(aNode: PRBTreeStringNode);
 
     { 遍历后序节点 }
-    function FindSuccessor(aNode: PStringRBTreeNode): PStringRBTreeNode;
+    function FindSuccessor(aNode: PRBTreeStringNode): PRBTreeStringNode;
 
     { 遍历前序节点 }
-    function FindPrecessor(aNode: PStringRBTreeNode): PStringRBTreeNode;
+    function FindPrecessor(aNode: PRBTreeStringNode): PRBTreeStringNode;
 
     { 指定节点的子节点下的最小节点 }
-    function FindLowest(aRoot: PStringRBTreeNode): PStringRBTreeNode; overload;
+    function FindLowest(aRoot: PRBTreeStringNode): PRBTreeStringNode; overload;
 
     { 最小节点 }
-    function FindLowest: PStringRBTreeNode; overload;
+    function FindLowest: PRBTreeStringNode; overload;
 
     { 指定节点的子节点下的最大节点 }
-    function FindHighest(aRoot: PStringRBTreeNode): PStringRBTreeNode; overload;
+    function FindHighest(aRoot: PRBTreeStringNode): PRBTreeStringNode; overload;
 
     { 最大节点 }
-    function FindHighest: PStringRBTreeNode; overload;
+    function FindHighest: PRBTreeStringNode; overload;
 
-    function GetEnumerator: TStringRBTreeNodeEnumerator;
-    function GetEnumeratorHighToLow: TStringRBTreeNodeEnumerator;
+    function GetEnumerator: TRBTreeStringNodeEnumerator;
+    function GetEnumeratorHighToLow: TRBTreeStringNodeEnumerator;
 
     { 根节点 }
-    property Root: PStringRBTreeNode read GetRoot;
+    property Root: PRBTreeStringNode read GetRoot;
   end;
 
   TStringRBTree = class(TStringRBTreeBase, IStringRBTree)
   private
     FTmpKey: TStringKey;
-    function GetRoot: PStringRBTreeNode;
+    function GetRoot: PRBTreeStringNode;
   protected
     procedure DisposeNode(aNode: PRBTreeNode); override;
 
@@ -322,25 +321,25 @@ type
     procedure SetKey(const aKeyStr: string; aKey: PStringKey);
     function DoHash(const aStr: string): integer;
   public
-    function Insert(const aKey: string; aValue: Pointer): PStringRBTreeNode;
-    function Find(aRoot: PStringRBTreeNode; const aKey: string): PStringRBTreeNode; reintroduce;
-    function Find(const aKey: string): PStringRBTreeNode; reintroduce;
-    function RemoveNode(aRoot: PStringRBTreeNode; const aKey: string): PStringRBTreeNode; reintroduce;
-    function RemoveNode(const aKey: string): PStringRBTreeNode; reintroduce;
-    function Remove(aRoot: PStringRBTreeNode; const aKey: string): Pointer; reintroduce;
+    function Insert(const aKey: string; aValue: Pointer): PRBTreeStringNode;
+    function Find(aRoot: PRBTreeStringNode; const aKey: string): PRBTreeStringNode; reintroduce;
+    function Find(const aKey: string): PRBTreeStringNode; reintroduce;
+    function RemoveNode(aRoot: PRBTreeStringNode; const aKey: string): PRBTreeStringNode; reintroduce;
+    function RemoveNode(const aKey: string): PRBTreeStringNode; reintroduce;
+    function Remove(aRoot: PRBTreeStringNode; const aKey: string): Pointer; reintroduce;
     function Remove(const aKey: string): Pointer; reintroduce;
-    procedure Delete(aNode: PStringRBTreeNode);
-    function FindSuccessor(aNode: PStringRBTreeNode): PStringRBTreeNode;
-    function FindPrecessor(aNode: PStringRBTreeNode): PStringRBTreeNode;
-    function FindLowest(aRoot: PStringRBTreeNode): PStringRBTreeNode; reintroduce;
-    function FindLowest: PStringRBTreeNode; reintroduce;
-    function FindHighest(aRoot: PStringRBTreeNode): PStringRBTreeNode; reintroduce;
-    function FindHighest: PStringRBTreeNode; reintroduce;
+    procedure Delete(aNode: PRBTreeStringNode);
+    function FindSuccessor(aNode: PRBTreeStringNode): PRBTreeStringNode;
+    function FindPrecessor(aNode: PRBTreeStringNode): PRBTreeStringNode;
+    function FindLowest(aRoot: PRBTreeStringNode): PRBTreeStringNode; reintroduce;
+    function FindLowest: PRBTreeStringNode; reintroduce;
+    function FindHighest(aRoot: PRBTreeStringNode): PRBTreeStringNode; reintroduce;
+    function FindHighest: PRBTreeStringNode; reintroduce;
 
-    function GetEnumerator: TStringRBTreeNodeEnumerator;
-    function GetEnumeratorHighToLow: TStringRBTreeNodeEnumerator;
+    function GetEnumerator: TRBTreeStringNodeEnumerator;
+    function GetEnumeratorHighToLow: TRBTreeStringNodeEnumerator;
 
-    property Root: PStringRBTreeNode read GetRoot;
+    property Root: PRBTreeStringNode read GetRoot;
   end;
 
 function MakeStringRBTree: IStringRBTree; overload;
@@ -350,29 +349,29 @@ function MakeStringRBTree(aHashCB: THashCB): IStringRBTree; overload;
 type
 
 
-  PStringObjectRBTreeNode = ^TStringObjectRBTreeNode;
+  PRBTreeStringObjectNode = ^TRBTreeStringObjectNode;
 
-  { TStringObjectRBTreeNode 字符串:对象 键值对节点 }
-  TStringObjectRBTreeNode = record
-    Left: PStringObjectRBTreeNode;
-    Right: PStringObjectRBTreeNode;
-    Parent: PStringObjectRBTreeNode;
+  { TRBTreeStringObjectNode 字符串:对象 键值对节点 }
+  TRBTreeStringObjectNode = record
+    Left: PRBTreeStringObjectNode;
+    Right: PRBTreeStringObjectNode;
+    Parent: PRBTreeStringObjectNode;
     Color: byte;
     Key: PStringKey;
     Value: TObject;
   end;
 
-procedure DisposeStringObjectRBTreeNode(var aNode: PStringObjectRBTreeNode); inline;
+procedure DisposeStringObjectRBTreeNode(var aNode: PRBTreeStringObjectNode); inline;
 
 type
 
-  { TStringObjectRBTreeNodeEnumerator }
+  { TRBTreeStringObjectNodeEnumerator }
 
-  TStringObjectRBTreeNodeEnumerator = class(TRBTreeNodeEnumerator)
+  TRBTreeStringObjectNodeEnumerator = class(TRBTreeNodeEnumerator)
   private
-    function GetCurrent: PStringObjectRBTreeNode;
+    function GetCurrent: PRBTreeStringObjectNode;
   public
-    property Current: PStringObjectRBTreeNode read GetCurrent;
+    property Current: PRBTreeStringObjectNode read GetCurrent;
   end;
 
 
@@ -380,61 +379,61 @@ type
 
   IStringObjectRBTree = interface(IStringRBTreeBase)
 
-    function GetRoot: PStringObjectRBTreeNode;
+    function GetRoot: PRBTreeStringObjectNode;
     function GetFreeObjects: boolean;
     procedure SetFreeObjects(AValue: boolean);
 
     { 插入节点 }
-    function Insert(const aKey: string; aObj: TObject): PStringObjectRBTreeNode;
+    function Insert(const aKey: string; aObj: TObject): PRBTreeStringObjectNode;
 
     { 查找 }
-    function Find(aRoot: PStringObjectRBTreeNode; const aKey: string): PStringObjectRBTreeNode; overload;
-    function Find(const aKey: string): PStringObjectRBTreeNode; overload;
+    function Find(aRoot: PRBTreeStringObjectNode; const aKey: string): PRBTreeStringObjectNode; overload;
+    function Find(const aKey: string): PRBTreeStringObjectNode; overload;
 
     { 通过Key从红黑树中移除节点并返回该节点 }
-    function RemoveNode(aRoot: PStringObjectRBTreeNode; const aKey: string): PStringObjectRBTreeNode; overload;
-    function RemoveNode(const aKey: string): PStringObjectRBTreeNode; overload;
+    function RemoveNode(aRoot: PRBTreeStringObjectNode; const aKey: string): PRBTreeStringObjectNode; overload;
+    function RemoveNode(const aKey: string): PRBTreeStringObjectNode; overload;
 
     { 通过Key从红黑树中移除节点并释放该节点 }
-    function Remove(aRoot: PStringObjectRBTreeNode; const aKey: string): TObject; overload;
+    function Remove(aRoot: PRBTreeStringObjectNode; const aKey: string): TObject; overload;
     function Remove(const aKey: string): TObject; overload;
 
     { 从红黑树删除指定节点 todo: 此接口本不应该公开,某种性能优化需求保留了它,不要滥用 }
-    procedure Delete(aNode: PStringObjectRBTreeNode);
+    procedure Delete(aNode: PRBTreeStringObjectNode);
 
     { 遍历后序节点 }
-    function FindSuccessor(aNode: PStringObjectRBTreeNode): PStringObjectRBTreeNode;
+    function FindSuccessor(aNode: PRBTreeStringObjectNode): PRBTreeStringObjectNode;
 
     { 遍历前序节点 }
-    function FindPrecessor(aNode: PStringObjectRBTreeNode): PStringObjectRBTreeNode;
+    function FindPrecessor(aNode: PRBTreeStringObjectNode): PRBTreeStringObjectNode;
 
     { 最小节点 }
-    function FindLowest: PStringObjectRBTreeNode; overload;
+    function FindLowest: PRBTreeStringObjectNode; overload;
 
     { 指定节点的子节点下的最小节点 }
-    function FindLowest(aRoot: PStringObjectRBTreeNode): PStringObjectRBTreeNode; overload;
+    function FindLowest(aRoot: PRBTreeStringObjectNode): PRBTreeStringObjectNode; overload;
 
     { 最大节点 }
-    function FindHighest: PStringObjectRBTreeNode; overload;
+    function FindHighest: PRBTreeStringObjectNode; overload;
 
     { 指定节点的子节点下的最大节点 }
-    function FindHighest(aRoot: PStringObjectRBTreeNode): PStringObjectRBTreeNode; overload;
+    function FindHighest(aRoot: PRBTreeStringObjectNode): PRBTreeStringObjectNode; overload;
 
-    function GetEnumerator: TStringObjectRBTreeNodeEnumerator;
-    function GetEnumeratorHighToLow: TStringObjectRBTreeNodeEnumerator;
+    function GetEnumerator: TRBTreeStringObjectNodeEnumerator;
+    function GetEnumeratorHighToLow: TRBTreeStringObjectNodeEnumerator;
 
 
     property FreeObjects: boolean read GetFreeObjects write SetFreeObjects;
 
     { 根节点 }
-    property Root: PStringObjectRBTreeNode read GetRoot;
+    property Root: PRBTreeStringObjectNode read GetRoot;
   end;
 
   TStringObjectRBTree = class(TStringRBTree, IStringObjectRBTree)
   private
     FFreeObjects: boolean;
     function GetFreeObjects: boolean;
-    function GetRoot: PStringObjectRBTreeNode;
+    function GetRoot: PRBTreeStringObjectNode;
     procedure SetFreeObjects(AValue: boolean);
   protected
     procedure DisposeNode(aNode: PRBTreeNode); override;
@@ -443,25 +442,25 @@ type
     constructor Create(aFreeObjects: boolean); overload;
     constructor Create(aHashCB: THashCB; aFreeObjects: boolean); overload;
 
-    function Insert(const aKey: string; aObj: TObject): PStringObjectRBTreeNode;
-    function Find(aRoot: PStringObjectRBTreeNode; const aKey: string): PStringObjectRBTreeNode; reintroduce;
-    function Find(const aKey: string): PStringObjectRBTreeNode; reintroduce;
-    function RemoveNode(aRoot: PStringObjectRBTreeNode; const aKey: string): PStringObjectRBTreeNode; reintroduce;
-    function RemoveNode(const aKey: string): PStringObjectRBTreeNode; reintroduce;
-    function Remove(aRoot: PStringObjectRBTreeNode; const aKey: string): TObject; reintroduce;
+    function Insert(const aKey: string; aObj: TObject): PRBTreeStringObjectNode;
+    function Find(aRoot: PRBTreeStringObjectNode; const aKey: string): PRBTreeStringObjectNode; reintroduce;
+    function Find(const aKey: string): PRBTreeStringObjectNode; reintroduce;
+    function RemoveNode(aRoot: PRBTreeStringObjectNode; const aKey: string): PRBTreeStringObjectNode; reintroduce;
+    function RemoveNode(const aKey: string): PRBTreeStringObjectNode; reintroduce;
+    function Remove(aRoot: PRBTreeStringObjectNode; const aKey: string): TObject; reintroduce;
     function Remove(const aKey: string): TObject; reintroduce;
-    procedure Delete(aNode: PStringObjectRBTreeNode);
-    function FindSuccessor(aNode: PStringObjectRBTreeNode): PStringObjectRBTreeNode;
-    function FindPrecessor(aNode: PStringObjectRBTreeNode): PStringObjectRBTreeNode;
-    function FindLowest: PStringObjectRBTreeNode; reintroduce;
-    function FindLowest(aRoot: PStringObjectRBTreeNode): PStringObjectRBTreeNode; reintroduce;
-    function FindHighest: PStringObjectRBTreeNode; reintroduce;
-    function FindHighest(aRoot: PStringObjectRBTreeNode): PStringObjectRBTreeNode; reintroduce;
-    function GetEnumerator: TStringObjectRBTreeNodeEnumerator;
-    function GetEnumeratorHighToLow: TStringObjectRBTreeNodeEnumerator;
+    procedure Delete(aNode: PRBTreeStringObjectNode);
+    function FindSuccessor(aNode: PRBTreeStringObjectNode): PRBTreeStringObjectNode;
+    function FindPrecessor(aNode: PRBTreeStringObjectNode): PRBTreeStringObjectNode;
+    function FindLowest: PRBTreeStringObjectNode; reintroduce;
+    function FindLowest(aRoot: PRBTreeStringObjectNode): PRBTreeStringObjectNode; reintroduce;
+    function FindHighest: PRBTreeStringObjectNode; reintroduce;
+    function FindHighest(aRoot: PRBTreeStringObjectNode): PRBTreeStringObjectNode; reintroduce;
+    function GetEnumerator: TRBTreeStringObjectNodeEnumerator;
+    function GetEnumeratorHighToLow: TRBTreeStringObjectNodeEnumerator;
 
     property FreeObjects: boolean read GetFreeObjects write SetFreeObjects;
-    property Root: PStringObjectRBTreeNode read GetRoot;
+    property Root: PRBTreeStringObjectNode read GetRoot;
   end;
 
 function MakeStringObjectRBTree: IStringObjectRBTree; overload;
@@ -472,107 +471,106 @@ function MakeStringObjectRBTree(aHashCB: THashCB; aFreeObjects: boolean): IStrin
 
 type
 
-  PStringPairRBTreeNode = ^TStringPairRBTreeNode;
+  PRBTreeStringPairNode = ^TRBTreeStringPairNode;
 
   { TRBTreeNode 红黑树节点 }
-  TStringPairRBTreeNode = record
-    Left: PStringPairRBTreeNode;
-    Right: PStringPairRBTreeNode;
-    Parent: PStringPairRBTreeNode;
+  TRBTreeStringPairNode = record
+    Left: PRBTreeStringPairNode;
+    Right: PRBTreeStringPairNode;
+    Parent: PRBTreeStringPairNode;
     Color: byte;
     Key: PStringKey;
     Value: string;
   end;
 
-procedure DisposeStringPairRBTreeNode(var aNode: PStringPairRBTreeNode);
+procedure DisposeStringPairRBTreeNode(var aNode: PRBTreeStringPairNode);
 
 type
 
-  { TStringPairRBTreeNodeEnumerator }
+  { TRBTreeStringPairNodeEnumerator }
 
-  TStringPairRBTreeNodeEnumerator = class(TRBTreeNodeEnumerator)
+  TRBTreeStringPairNodeEnumerator = class(TRBTreeNodeEnumerator)
   private
-    function GetCurrent: PStringPairRBTreeNode;
+    function GetCurrent: PRBTreeStringPairNode;
   public
-    property Current: PStringPairRBTreeNode read GetCurrent;
+    property Current: PRBTreeStringPairNode read GetCurrent;
   end;
 
 
   { IStringPairRBTree }
 
   IStringPairRBTree = interface(IStringRBTreeBase)
-    function GetRoot: PStringPairRBTreeNode;
+    function GetRoot: PRBTreeStringPairNode;
 
     { 插入节点 }
-    function Insert(const aKey, aValue: string): PStringPairRBTreeNode;
+    function Insert(const aKey, aValue: string): PRBTreeStringPairNode;
 
     { 查找 }
-    function Find(aRoot: PStringPairRBTreeNode; const aKey: string): PStringPairRBTreeNode; overload;
-    function Find(const aKey: string): PStringPairRBTreeNode; overload;
+    function Find(aRoot: PRBTreeStringPairNode; const aKey: string): PRBTreeStringPairNode; overload;
+    function Find(const aKey: string): PRBTreeStringPairNode; overload;
 
     { 通过Key从红黑树中移除节点并返回该节点 }
-    function RemoveNode(aRoot: PStringPairRBTreeNode; const aKey: string): PStringPairRBTreeNode; overload;
-    function RemoveNode(const aKey: string): PStringPairRBTreeNode; overload;
+    function RemoveNode(aRoot: PRBTreeStringPairNode; const aKey: string): PRBTreeStringPairNode; overload;
+    function RemoveNode(const aKey: string): PRBTreeStringPairNode; overload;
 
     { 通过Key移除 }
-    function Remove(aRoot: PStringPairRBTreeNode; const aKey: string): string; overload;
+    function Remove(aRoot: PRBTreeStringPairNode; const aKey: string): string; overload;
     function Remove(const aKey: string): string; overload;
 
     { 从红黑树删除指定节点 todo: 此接口本不应该公开,某种性能优化需求保留了它,不要滥用 }
-    procedure Delete(aNode: PStringPairRBTreeNode);
+    procedure Delete(aNode: PRBTreeStringPairNode);
 
     { 遍历后序节点 }
-    function FindSuccessor(aNode: PStringPairRBTreeNode): PStringPairRBTreeNode;
+    function FindSuccessor(aNode: PRBTreeStringPairNode): PRBTreeStringPairNode;
 
     { 遍历前序节点 }
-    function FindPrecessor(aNode: PStringPairRBTreeNode): PStringPairRBTreeNode;
+    function FindPrecessor(aNode: PRBTreeStringPairNode): PRBTreeStringPairNode;
 
     { 指定节点的子节点下的最小节点 }
-    function FindLowest(aRoot: PStringPairRBTreeNode): PStringPairRBTreeNode; overload;
+    function FindLowest(aRoot: PRBTreeStringPairNode): PRBTreeStringPairNode; overload;
 
     { 最小节点 }
-    function FindLowest: PStringPairRBTreeNode; overload;
+    function FindLowest: PRBTreeStringPairNode; overload;
 
     { 指定节点的子节点下的最大节点 }
-    function FindHighest(aRoot: PStringPairRBTreeNode): PStringPairRBTreeNode; overload;
+    function FindHighest(aRoot: PRBTreeStringPairNode): PRBTreeStringPairNode; overload;
 
     { 最大节点 }
-    function FindHighest: PStringPairRBTreeNode; overload;
+    function FindHighest: PRBTreeStringPairNode; overload;
 
-    function GetEnumerator: TStringPairRBTreeNodeEnumerator;
-    function GetEnumeratorHighToLow: TStringPairRBTreeNodeEnumerator;
+    function GetEnumerator: TRBTreeStringPairNodeEnumerator;
+    function GetEnumeratorHighToLow: TRBTreeStringPairNodeEnumerator;
 
     { 根节点 }
-    property Root: PStringPairRBTreeNode read GetRoot;
+    property Root: PRBTreeStringPairNode read GetRoot;
   end;
 
   TStringPairRBTree = class(TStringRBTree, IStringPairRBTree)
   private
-    function GetRoot: PStringPairRBTreeNode;
+    function GetRoot: PRBTreeStringPairNode;
   protected
-    procedure DoUpdateNode(aNode: PRBTreeNode; aValue: Pointer); override;
     procedure DisposeNode(aNode: PRBTreeNode); override;
   public
-    function Insert(const aKey, aValue: string): PStringPairRBTreeNode;
-    function Find(aRoot: PStringPairRBTreeNode; const aKey: string): PStringPairRBTreeNode; reintroduce;
-    function Find(const aKey: string): PStringPairRBTreeNode; reintroduce;
-    function RemoveNode(aRoot: PStringPairRBTreeNode; const aKey: string): PStringPairRBTreeNode; reintroduce;
-    function RemoveNode(const aKey: string): PStringPairRBTreeNode; reintroduce;
-    function Remove(aRoot: PStringPairRBTreeNode; const aKey: string): string; reintroduce;
+    function Insert(const aKey, aValue: string): PRBTreeStringPairNode;
+    function Find(aRoot: PRBTreeStringPairNode; const aKey: string): PRBTreeStringPairNode; reintroduce;
+    function Find(const aKey: string): PRBTreeStringPairNode; reintroduce;
+    function RemoveNode(aRoot: PRBTreeStringPairNode; const aKey: string): PRBTreeStringPairNode; reintroduce;
+    function RemoveNode(const aKey: string): PRBTreeStringPairNode; reintroduce;
+    function Remove(aRoot: PRBTreeStringPairNode; const aKey: string): string; reintroduce;
     function Remove(const aKey: string): string; reintroduce;
-    procedure Delete(aNode: PStringPairRBTreeNode);
-    function FindSuccessor(aNode: PStringPairRBTreeNode): PStringPairRBTreeNode;
-    function FindPrecessor(aNode: PStringPairRBTreeNode): PStringPairRBTreeNode;
-    function FindLowest(aRoot: PStringPairRBTreeNode): PStringPairRBTreeNode; reintroduce;
-    function FindLowest: PStringPairRBTreeNode; reintroduce;
-    function FindHighest(aRoot: PStringPairRBTreeNode): PStringPairRBTreeNode; reintroduce;
-    function FindHighest: PStringPairRBTreeNode; reintroduce;
+    procedure Delete(aNode: PRBTreeStringPairNode);
+    function FindSuccessor(aNode: PRBTreeStringPairNode): PRBTreeStringPairNode;
+    function FindPrecessor(aNode: PRBTreeStringPairNode): PRBTreeStringPairNode;
+    function FindLowest(aRoot: PRBTreeStringPairNode): PRBTreeStringPairNode; reintroduce;
+    function FindLowest: PRBTreeStringPairNode; reintroduce;
+    function FindHighest(aRoot: PRBTreeStringPairNode): PRBTreeStringPairNode; reintroduce;
+    function FindHighest: PRBTreeStringPairNode; reintroduce;
 
-    function GetEnumerator: TStringPairRBTreeNodeEnumerator;
-    function GetEnumeratorHighToLow: TStringPairRBTreeNodeEnumerator;
+    function GetEnumerator: TRBTreeStringPairNodeEnumerator;
+    function GetEnumeratorHighToLow: TRBTreeStringPairNodeEnumerator;
 
     { 根节点 }
-    property Root: PStringPairRBTreeNode read GetRoot;
+    property Root: PRBTreeStringPairNode read GetRoot;
   end;
 
 function MakeStringPairRBTree: IStringPairRBTree; overload;
@@ -727,7 +725,7 @@ begin
   Result := (Result xor $FFFFFFFF);
 end;
 
-procedure DisposeStringRBTreeNode(var aNode: PStringRBTreeNode);
+procedure DisposeStringRBTreeNode(var aNode: PRBTreeStringNode);
 begin
   Dispose(aNode^.Key);
   Dispose(aNode);
@@ -743,7 +741,7 @@ begin
   Result := TStringRBTree.Create(aHashCB);
 end;
 
-procedure DisposeStringObjectRBTreeNode(var aNode: PStringObjectRBTreeNode);
+procedure DisposeStringObjectRBTreeNode(var aNode: PRBTreeStringObjectNode);
 begin
   Dispose(aNode^.Key);
   Dispose(aNode);
@@ -769,7 +767,7 @@ begin
   Result := TStringObjectRBTree.Create(aHashCB, aFreeObjects);
 end;
 
-procedure DisposeStringPairRBTreeNode(var aNode: PStringPairRBTreeNode);
+procedure DisposeStringPairRBTreeNode(var aNode: PRBTreeStringPairNode);
 begin
   Dispose(aNode^.Key);
  aNode^.Value:='';
@@ -1262,11 +1260,6 @@ begin
   end;
 end;
 
-procedure TRBTree.DoUpdateNode(aNode: PRBTreeNode; aValue: Pointer);
-begin
-  aNode^.Value := aValue;
-end;
-
 function TRBTree.DoCompare(aPtr1, aPtr2: Pointer): PtrInt;
 begin
   Result := FCompareCB(aPtr1, aPtr2);
@@ -1352,7 +1345,7 @@ begin
   Result := AllocNode;
   Result^.Key := aKey;
   InternalInsert(Result);
-  DoUpdateNode(Result,aValue);
+  Result^.Value:=aValue;
   Inc(FCount);
 end;
 
@@ -1400,7 +1393,7 @@ begin
   if LNode <> nil then
   begin
     Result := LNode^.Value;
-    DoUpdateNode(LNode,nil);
+    LNode^.Value:=nil;
     DisposeNode(LNode);
   end
   else
@@ -1526,21 +1519,21 @@ begin
   FHashCB := aHashCB;
 end;
 
-{ TStringRBTreeNodeEnumerator }
+{ TRBTreeStringNodeEnumerator }
 
-function TStringRBTreeNodeEnumerator.GetCurrent: PStringRBTreeNode;
+function TRBTreeStringNodeEnumerator.GetCurrent: PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(FCurrent);
+  Result := PRBTreeStringNode(FCurrent);
 end;
 
-function TStringRBTree.GetRoot: PStringRBTreeNode;
+function TStringRBTree.GetRoot: PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(inherited GetRoot);
+  Result := PRBTreeStringNode(inherited GetRoot);
 end;
 
 procedure TStringRBTree.DisposeNode(aNode: PRBTreeNode);
 begin
-  Dispose(PStringRBTreeNode(aNode)^.Key);
+  Dispose(PRBTreeStringNode(aNode)^.Key);
   inherited DisposeNode(aNode);
 end;
 
@@ -1564,34 +1557,34 @@ begin
   Result := FHashCB(aStr);
 end;
 
-function TStringRBTree.Insert(const aKey: string; aValue: Pointer): PStringRBTreeNode;
+function TStringRBTree.Insert(const aKey: string; aValue: Pointer): PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(inherited Insert(CreateKey(aKey), aValue));
+  Result := PRBTreeStringNode(inherited Insert(CreateKey(aKey), aValue));
 end;
 
-function TStringRBTree.Find(aRoot: PStringRBTreeNode; const aKey: string): PStringRBTreeNode;
+function TStringRBTree.Find(aRoot: PRBTreeStringNode; const aKey: string): PRBTreeStringNode;
 begin
   SetKey(aKey, @FTmpKey);
-  Result := PStringRBTreeNode(inherited Find(PRBTreeNode(aRoot), @FTmpKey));
+  Result := PRBTreeStringNode(inherited Find(PRBTreeNode(aRoot), @FTmpKey));
 end;
 
-function TStringRBTree.Find(const aKey: string): PStringRBTreeNode;
+function TStringRBTree.Find(const aKey: string): PRBTreeStringNode;
 begin
   Result := Find(Root, aKey);
 end;
 
-function TStringRBTree.RemoveNode(aRoot: PStringRBTreeNode; const aKey: string): PStringRBTreeNode;
+function TStringRBTree.RemoveNode(aRoot: PRBTreeStringNode; const aKey: string): PRBTreeStringNode;
 begin
   SetKey(aKey, @FTmpKey);
-  Result := PStringRBTreeNode(inherited RemoveNode(PRBTreeNode(aRoot), @FTmpKey));
+  Result := PRBTreeStringNode(inherited RemoveNode(PRBTreeNode(aRoot), @FTmpKey));
 end;
 
-function TStringRBTree.RemoveNode(const aKey: string): PStringRBTreeNode;
+function TStringRBTree.RemoveNode(const aKey: string): PRBTreeStringNode;
 begin
   Result := RemoveNode(Root, aKey);
 end;
 
-function TStringRBTree.Remove(aRoot: PStringRBTreeNode; const aKey: string): Pointer;
+function TStringRBTree.Remove(aRoot: PRBTreeStringNode; const aKey: string): Pointer;
 begin
   SetKey(aKey, @FTmpKey);
   Result := inherited Remove(PRBTreeNode(aRoot), @FTmpKey);
@@ -1602,61 +1595,61 @@ begin
   Result := Remove(Root, aKey);
 end;
 
-procedure TStringRBTree.Delete(aNode: PStringRBTreeNode);
+procedure TStringRBTree.Delete(aNode: PRBTreeStringNode);
 begin
   inherited Delete(PRBTreeNode(aNode));
 end;
 
-function TStringRBTree.FindSuccessor(aNode: PStringRBTreeNode): PStringRBTreeNode;
+function TStringRBTree.FindSuccessor(aNode: PRBTreeStringNode): PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(inherited FindSuccessor(PRBTreeNode(aNode)));
+  Result := PRBTreeStringNode(inherited FindSuccessor(PRBTreeNode(aNode)));
 end;
 
-function TStringRBTree.FindPrecessor(aNode: PStringRBTreeNode): PStringRBTreeNode;
+function TStringRBTree.FindPrecessor(aNode: PRBTreeStringNode): PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(inherited FindPrecessor(PRBTreeNode(aNode)));
+  Result := PRBTreeStringNode(inherited FindPrecessor(PRBTreeNode(aNode)));
 end;
 
-function TStringRBTree.FindLowest(aRoot: PStringRBTreeNode): PStringRBTreeNode;
+function TStringRBTree.FindLowest(aRoot: PRBTreeStringNode): PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(inherited FindLowest(PRBTreeNode(aRoot)));
+  Result := PRBTreeStringNode(inherited FindLowest(PRBTreeNode(aRoot)));
 end;
 
-function TStringRBTree.FindLowest: PStringRBTreeNode;
+function TStringRBTree.FindLowest: PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(inherited FindLowest());
+  Result := PRBTreeStringNode(inherited FindLowest());
 end;
 
-function TStringRBTree.FindHighest(aRoot: PStringRBTreeNode): PStringRBTreeNode;
+function TStringRBTree.FindHighest(aRoot: PRBTreeStringNode): PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(inherited FindHighest(PRBTreeNode(aRoot)));
+  Result := PRBTreeStringNode(inherited FindHighest(PRBTreeNode(aRoot)));
 end;
 
-function TStringRBTree.FindHighest: PStringRBTreeNode;
+function TStringRBTree.FindHighest: PRBTreeStringNode;
 begin
-  Result := PStringRBTreeNode(inherited FindHighest());
+  Result := PRBTreeStringNode(inherited FindHighest());
 end;
 
-function TStringRBTree.GetEnumerator: TStringRBTreeNodeEnumerator;
+function TStringRBTree.GetEnumerator: TRBTreeStringNodeEnumerator;
 begin
-  Result := TStringRBTreeNodeEnumerator.Create(Self, True);
+  Result := TRBTreeStringNodeEnumerator.Create(Self, True);
 end;
 
-function TStringRBTree.GetEnumeratorHighToLow: TStringRBTreeNodeEnumerator;
+function TStringRBTree.GetEnumeratorHighToLow: TRBTreeStringNodeEnumerator;
 begin
-  Result := TStringRBTreeNodeEnumerator.Create(Self, False);
+  Result := TRBTreeStringNodeEnumerator.Create(Self, False);
 end;
 
-{ TStringObjectRBTreeNodeEnumerator }
+{ TRBTreeStringObjectNodeEnumerator }
 
-function TStringObjectRBTreeNodeEnumerator.GetCurrent: PStringObjectRBTreeNode;
+function TRBTreeStringObjectNodeEnumerator.GetCurrent: PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(FCurrent);
+  Result := PRBTreeStringObjectNode(FCurrent);
 end;
 
-function TStringObjectRBTree.GetRoot: PStringObjectRBTreeNode;
+function TStringObjectRBTree.GetRoot: PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(FRootNode);
+  Result := PRBTreeStringObjectNode(FRootNode);
 end;
 
 function TStringObjectRBTree.GetFreeObjects: boolean;
@@ -1671,11 +1664,11 @@ end;
 
 procedure TStringObjectRBTree.DisposeNode(aNode: PRBTreeNode);
 var
-  LNode: PStringObjectRBTreeNode;
+  LNode: PRBTreeStringObjectNode;
 begin
   if FFreeObjects then
   begin
-    LNode := PStringObjectRBTreeNode(aNode);
+    LNode := PRBTreeStringObjectNode(aNode);
     if (LNode^.Value <> nil) then
       FreeAndNil(LNode^.Value);
   end;
@@ -1700,34 +1693,34 @@ begin
   FFreeObjects := aFreeObjects;
 end;
 
-function TStringObjectRBTree.Insert(const aKey: string; aObj: TObject): PStringObjectRBTreeNode;
+function TStringObjectRBTree.Insert(const aKey: string; aObj: TObject): PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(inherited Insert(aKey, Pointer(aObj)));
+  Result := PRBTreeStringObjectNode(inherited Insert(aKey, Pointer(aObj)));
 end;
 
-function TStringObjectRBTree.Find(aRoot: PStringObjectRBTreeNode; const aKey: string): PStringObjectRBTreeNode;
+function TStringObjectRBTree.Find(aRoot: PRBTreeStringObjectNode; const aKey: string): PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(inherited Find(PStringRBTreeNode(aRoot), aKey));
+  Result := PRBTreeStringObjectNode(inherited Find(PRBTreeStringNode(aRoot), aKey));
 end;
 
-function TStringObjectRBTree.Find(const aKey: string): PStringObjectRBTreeNode;
+function TStringObjectRBTree.Find(const aKey: string): PRBTreeStringObjectNode;
 begin
   Result := Find(Root, aKey);
 end;
 
-function TStringObjectRBTree.RemoveNode(aRoot: PStringObjectRBTreeNode; const aKey: string): PStringObjectRBTreeNode;
+function TStringObjectRBTree.RemoveNode(aRoot: PRBTreeStringObjectNode; const aKey: string): PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(inherited RemoveNode(PStringRBTreeNode(aRoot), aKey));
+  Result := PRBTreeStringObjectNode(inherited RemoveNode(PRBTreeStringNode(aRoot), aKey));
 end;
 
-function TStringObjectRBTree.RemoveNode(const aKey: string): PStringObjectRBTreeNode;
+function TStringObjectRBTree.RemoveNode(const aKey: string): PRBTreeStringObjectNode;
 begin
   Result := RemoveNode(Root, aKey);
 end;
 
-function TStringObjectRBTree.Remove(aRoot: PStringObjectRBTreeNode; const aKey: string): TObject;
+function TStringObjectRBTree.Remove(aRoot: PRBTreeStringObjectNode; const aKey: string): TObject;
 begin
-  Result := TObject(inherited Remove(PStringRBTreeNode(aRoot), aKey));
+  Result := TObject(inherited Remove(PRBTreeStringNode(aRoot), aKey));
 end;
 
 function TStringObjectRBTree.Remove(const aKey: string): TObject;
@@ -1735,102 +1728,107 @@ begin
   Result := Remove(Root, aKey);
 end;
 
-procedure TStringObjectRBTree.Delete(aNode: PStringObjectRBTreeNode);
+procedure TStringObjectRBTree.Delete(aNode: PRBTreeStringObjectNode);
 begin
-  inherited Delete(PStringRBTreeNode(aNode));
+  inherited Delete(PRBTreeStringNode(aNode));
 end;
 
-function TStringObjectRBTree.FindSuccessor(aNode: PStringObjectRBTreeNode): PStringObjectRBTreeNode;
+function TStringObjectRBTree.FindSuccessor(aNode: PRBTreeStringObjectNode): PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(inherited FindSuccessor(PStringRBTreeNode(aNode)));
+  Result := PRBTreeStringObjectNode(inherited FindSuccessor(PRBTreeStringNode(aNode)));
 end;
 
-function TStringObjectRBTree.FindPrecessor(aNode: PStringObjectRBTreeNode): PStringObjectRBTreeNode;
+function TStringObjectRBTree.FindPrecessor(aNode: PRBTreeStringObjectNode): PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(inherited FindPrecessor(PStringRBTreeNode(aNode)));
+  Result := PRBTreeStringObjectNode(inherited FindPrecessor(PRBTreeStringNode(aNode)));
 end;
 
-function TStringObjectRBTree.FindLowest(aRoot: PStringObjectRBTreeNode): PStringObjectRBTreeNode;
+function TStringObjectRBTree.FindLowest(aRoot: PRBTreeStringObjectNode): PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(inherited FindLowest(PStringRBTreeNode(aRoot)));
+  Result := PRBTreeStringObjectNode(inherited FindLowest(PRBTreeStringNode(aRoot)));
 end;
 
-function TStringObjectRBTree.FindLowest: PStringObjectRBTreeNode;
+function TStringObjectRBTree.FindLowest: PRBTreeStringObjectNode;
 begin
   Result := FindLowest(Root);
 end;
 
-function TStringObjectRBTree.FindHighest(aRoot: PStringObjectRBTreeNode): PStringObjectRBTreeNode;
+function TStringObjectRBTree.FindHighest(aRoot: PRBTreeStringObjectNode): PRBTreeStringObjectNode;
 begin
-  Result := PStringObjectRBTreeNode(inherited FindHighest(PStringRBTreeNode(aRoot)));
+  Result := PRBTreeStringObjectNode(inherited FindHighest(PRBTreeStringNode(aRoot)));
 end;
 
-function TStringObjectRBTree.FindHighest: PStringObjectRBTreeNode;
+function TStringObjectRBTree.FindHighest: PRBTreeStringObjectNode;
 begin
   Result := FindHighest(Root);
 end;
 
-function TStringObjectRBTree.GetEnumerator: TStringObjectRBTreeNodeEnumerator;
+function TStringObjectRBTree.GetEnumerator: TRBTreeStringObjectNodeEnumerator;
 begin
-  Result := TStringObjectRBTreeNodeEnumerator.Create(Self, True);
+  Result := TRBTreeStringObjectNodeEnumerator.Create(Self, True);
 end;
 
-function TStringObjectRBTree.GetEnumeratorHighToLow: TStringObjectRBTreeNodeEnumerator;
+function TStringObjectRBTree.GetEnumeratorHighToLow: TRBTreeStringObjectNodeEnumerator;
 begin
-  Result := TStringObjectRBTreeNodeEnumerator.Create(Self, False);
+  Result := TRBTreeStringObjectNodeEnumerator.Create(Self, False);
 end;
 
-{ TStringPairRBTreeNodeEnumerator }
+{ TRBTreeStringPairNodeEnumerator }
 
-function TStringPairRBTreeNodeEnumerator.GetCurrent: PStringPairRBTreeNode;
+function TRBTreeStringPairNodeEnumerator.GetCurrent: PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(FCurrent);
+  Result := PRBTreeStringPairNode(FCurrent);
 end;
 
-function TStringPairRBTree.GetRoot: PStringPairRBTreeNode;
+function TStringPairRBTree.GetRoot: PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(FRootNode);
-end;
-
-procedure TStringPairRBTree.DoUpdateNode(aNode: PRBTreeNode; aValue: Pointer);
-begin
-  PStringPairRBTreeNode(aNode)^.Value:=string(aValue);
+  Result := PRBTreeStringPairNode(FRootNode);
 end;
 
 procedure TStringPairRBTree.DisposeNode(aNode: PRBTreeNode);
 begin
-  PStringPairRBTreeNode(aNode)^.Value := '';
+  PRBTreeStringPairNode(aNode)^.Value := '';
   inherited DisposeNode(aNode);
 end;
 
-function TStringPairRBTree.Insert(const aKey, aValue: string): PStringPairRBTreeNode;
+function TStringPairRBTree.Insert(const aKey, aValue: string): PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(inherited Insert(aKey, Pointer(aValue)));
+  Result:=PRBTreeStringPairNode(Inherited Insert(aKey,nil));
+  Result^.Value:=aValue;
 end;
 
-function TStringPairRBTree.Find(aRoot: PStringPairRBTreeNode; const aKey: string): PStringPairRBTreeNode;
+function TStringPairRBTree.Find(aRoot: PRBTreeStringPairNode; const aKey: string): PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(inherited Find(PStringRBTreeNode(aRoot), aKey));
+  Result := PRBTreeStringPairNode(inherited Find(PRBTreeStringNode(aRoot), aKey));
 end;
 
-function TStringPairRBTree.Find(const aKey: string): PStringPairRBTreeNode;
+function TStringPairRBTree.Find(const aKey: string): PRBTreeStringPairNode;
 begin
   Result := Find(Root, aKey);
 end;
 
-function TStringPairRBTree.RemoveNode(aRoot: PStringPairRBTreeNode; const aKey: string): PStringPairRBTreeNode;
+function TStringPairRBTree.RemoveNode(aRoot: PRBTreeStringPairNode; const aKey: string): PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(inherited RemoveNode(PStringRBTreeNode(aRoot), aKey));
+  Result := PRBTreeStringPairNode(inherited RemoveNode(PRBTreeStringNode(aRoot), aKey));
 end;
 
-function TStringPairRBTree.RemoveNode(const aKey: string): PStringPairRBTreeNode;
+function TStringPairRBTree.RemoveNode(const aKey: string): PRBTreeStringPairNode;
 begin
   Result := RemoveNode(Root, aKey);
 end;
 
-function TStringPairRBTree.Remove(aRoot: PStringPairRBTreeNode; const aKey: string): string;
+function TStringPairRBTree.Remove(aRoot: PRBTreeStringPairNode; const aKey: string): string;
+var
+  LNode: PRBTreeStringPairNode;
 begin
-  Result := string(inherited Remove(PStringRBTreeNode(aRoot), aKey));
+  LNode := RemoveNode(aRoot, aKey);
+  if LNode <> nil then
+  begin
+    Result := LNode^.Value;
+    DisposeNode(PRBTreeNode(LNode));
+  end
+  else
+    Initialize(Result);
 end;
 
 function TStringPairRBTree.Remove(const aKey: string): string;
@@ -1838,49 +1836,49 @@ begin
   Result := Remove(Root, aKey);
 end;
 
-procedure TStringPairRBTree.Delete(aNode: PStringPairRBTreeNode);
+procedure TStringPairRBTree.Delete(aNode: PRBTreeStringPairNode);
 begin
-  inherited Delete(PStringRBTreeNode(aNode));
+  inherited Delete(PRBTreeStringNode(aNode));
 end;
 
-function TStringPairRBTree.FindSuccessor(aNode: PStringPairRBTreeNode): PStringPairRBTreeNode;
+function TStringPairRBTree.FindSuccessor(aNode: PRBTreeStringPairNode): PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(inherited FindSuccessor(PStringRBTreeNode(aNode)));
+  Result := PRBTreeStringPairNode(inherited FindSuccessor(PRBTreeStringNode(aNode)));
 end;
 
-function TStringPairRBTree.FindPrecessor(aNode: PStringPairRBTreeNode): PStringPairRBTreeNode;
+function TStringPairRBTree.FindPrecessor(aNode: PRBTreeStringPairNode): PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(inherited FindPrecessor(PStringRBTreeNode(aNode)));
+  Result := PRBTreeStringPairNode(inherited FindPrecessor(PRBTreeStringNode(aNode)));
 end;
 
-function TStringPairRBTree.FindLowest(aRoot: PStringPairRBTreeNode): PStringPairRBTreeNode;
+function TStringPairRBTree.FindLowest(aRoot: PRBTreeStringPairNode): PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(inherited FindLowest(PStringRBTreeNode(aRoot)));
+  Result := PRBTreeStringPairNode(inherited FindLowest(PRBTreeStringNode(aRoot)));
 end;
 
-function TStringPairRBTree.FindLowest: PStringPairRBTreeNode;
+function TStringPairRBTree.FindLowest: PRBTreeStringPairNode;
 begin
   Result := FindLowest(Root);
 end;
 
-function TStringPairRBTree.FindHighest(aRoot: PStringPairRBTreeNode): PStringPairRBTreeNode;
+function TStringPairRBTree.FindHighest(aRoot: PRBTreeStringPairNode): PRBTreeStringPairNode;
 begin
-  Result := PStringPairRBTreeNode(inherited FindHighest(PStringRBTreeNode(aRoot)));
+  Result := PRBTreeStringPairNode(inherited FindHighest(PRBTreeStringNode(aRoot)));
 end;
 
-function TStringPairRBTree.FindHighest: PStringPairRBTreeNode;
+function TStringPairRBTree.FindHighest: PRBTreeStringPairNode;
 begin
   Result := FindHighest(Root);
 end;
 
-function TStringPairRBTree.GetEnumerator: TStringPairRBTreeNodeEnumerator;
+function TStringPairRBTree.GetEnumerator: TRBTreeStringPairNodeEnumerator;
 begin
-  Result := TStringPairRBTreeNodeEnumerator.Create(Self, True);
+  Result := TRBTreeStringPairNodeEnumerator.Create(Self, True);
 end;
 
-function TStringPairRBTree.GetEnumeratorHighToLow: TStringPairRBTreeNodeEnumerator;
+function TStringPairRBTree.GetEnumeratorHighToLow: TRBTreeStringPairNodeEnumerator;
 begin
-  Result := TStringPairRBTreeNodeEnumerator.Create(Self, False);
+  Result := TRBTreeStringPairNodeEnumerator.Create(Self, False);
 end;
 
 { TRBTreeNodePool }

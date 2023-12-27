@@ -14,9 +14,9 @@ uses
 
   function GetNodeKeyValue(aNode: PRBTreeNode): TRBKeyValue;
   var
-    LNode: PStringRBTreeNode;
+    LNode: PRBTreeStringNode;
   begin
-    LNode := PStringRBTreeNode(aNode);
+    LNode := PRBTreeStringNode(aNode);
     Result.Key := LNode^.Key^.Key;
     Result.Value := string(LNode^.Value) + ' (' + IntToHex(LNode^.Key^.KeyHash) + ')';
   end;
@@ -27,11 +27,11 @@ uses
     LTestPairLen: SizeInt;
     LTree: IStringRBTree;
     LPair: TTestPair;
-    LNode: PStringRBTreeNode;
+    LNode: PRBTreeStringNode;
     LFound, i: integer;
     LP: PTestPair;
     LStr: string;
-    LEnu: TStringRBTreeNodeEnumerator;
+    LEnu: TRBTreeStringNodeEnumerator;
   begin
     LTestPairLen := Length(TestPairs);
     LTree := MakeStringRBTree();

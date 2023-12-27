@@ -14,9 +14,9 @@ uses
 
   function GetNodeKeyValue(aNode: PRBTreeNode): TRBKeyValue;
   var
-    LNode: PStringPairRBTreeNode;
+    LNode: PRBTreeStringPairNode;
   begin
-    LNode := PStringPairRBTreeNode(aNode);
+    LNode := PRBTreeStringPairNode(aNode);
     Result.Key := LNode^.Key^.Key;
     Result.Value := LNode^.Value+ ' (' + IntToHex(LNode^.Key^.KeyHash) + ')';
   end;
@@ -24,10 +24,10 @@ uses
   procedure RunExample;
   var
     LTree: IStringPairRBTree;
-    LNode: PStringPairRBTreeNode;
+    LNode: PRBTreeStringPairNode;
     LPair: TTestPair;
     LTestPairLen: SizeInt;
-    LEnu: TStringPairRBTreeNodeEnumerator;
+    LEnu: TRBTreeStringPairNodeEnumerator;
     LIT: integer;
     LFound, i: integer;
     LP: PTestPair;

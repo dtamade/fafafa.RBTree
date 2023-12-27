@@ -12,7 +12,7 @@ uses
   fafafa.RBTree;
 
 type
-  PPStringPairRBTreeNode = ^PStringPairRBTreeNode;
+  PPRBTreeStringPairNode = ^PRBTreeStringPairNode;
 
   { TForm1 }
 
@@ -55,10 +55,10 @@ type
 
   private
     FTree: IStringPairRBTree;
-    FLastNode: PStringPairRBTreeNode;
+    FLastNode: PRBTreeStringPairNode;
 
-    function GetSelectedNode: PStringPairRBTreeNode;
-    procedure GoNode(aNode: PStringPairRBTreeNode);
+    function GetSelectedNode: PRBTreeStringPairNode;
+    procedure GoNode(aNode: PRBTreeStringPairNode);
   public
     procedure DoUpdate;
   end;
@@ -86,7 +86,7 @@ end;
 
 procedure TForm1.Button10Click(Sender: TObject);
 var
-  LNode, LLowNode: PStringPairRBTreeNode;
+  LNode, LLowNode: PRBTreeStringPairNode;
 begin
   LNode := GetSelectedNode;
   if LNode = nil then
@@ -98,7 +98,7 @@ end;
 
 procedure TForm1.Button11Click(Sender: TObject);
 var
-  LNode, LHiNode: PStringPairRBTreeNode;
+  LNode, LHiNode: PRBTreeStringPairNode;
 begin
   LNode := GetSelectedNode;
   if LNode = nil then
@@ -110,7 +110,7 @@ end;
 
 procedure TForm1.Button12Click(Sender: TObject);
 var
-  LNode: PStringPairRBTreeNode;
+  LNode: PRBTreeStringPairNode;
 begin
   LNode := FTree.Root;
   if LNode <> nil then
@@ -120,7 +120,7 @@ end;
 procedure TForm1.Button2Click(Sender: TObject);
 var
   LKey: string;
-  LNode: PStringPairRBTreeNode;
+  LNode: PRBTreeStringPairNode;
 begin
   LKey := edtKey.Text;
   if not LKey.IsEmpty then
@@ -160,7 +160,7 @@ end;
 
 procedure TForm1.Button6Click(Sender: TObject);
 var
-  LNode: PStringPairRBTreeNode;
+  LNode: PRBTreeStringPairNode;
 begin
   LNode := FTree.RemoveNode(edtKey.Text);
   if LNode <> nil then
@@ -173,7 +173,7 @@ end;
 
 procedure TForm1.Button7Click(Sender: TObject);
 var
-  LNode: PStringPairRBTreeNode;
+  LNode: PRBTreeStringPairNode;
 begin
   LNode := FTree.Find(edtKey.Text);
   if LNode <> nil then
@@ -185,7 +185,7 @@ end;
 
 procedure TForm1.Button8Click(Sender: TObject);
 var
-  LNode, LSucNode: PStringPairRBTreeNode;
+  LNode, LSucNode: PRBTreeStringPairNode;
 begin
   LNode := GetSelectedNode;
   if LNode = nil then
@@ -198,7 +198,7 @@ end;
 
 procedure TForm1.Button9Click(Sender: TObject);
 var
-  LNode, LPreNode: PStringPairRBTreeNode;
+  LNode, LPreNode: PRBTreeStringPairNode;
 begin
   LNode := GetSelectedNode;
   if LNode <> nil then
@@ -211,12 +211,12 @@ end;
 
 procedure TForm1.vtGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 var
-  LData: PPStringPairRBTreeNode;
+  LData: PPRBTreeStringPairNode;
 begin
   LData := Sender.GetNodeData(Node);
   if LData^ <> nil then
   begin
-    if LData^ <> PStringPairRBTreeNode(FTree.Sentinel) then
+    if LData^ <> PRBTreeStringPairNode(FTree.Sentinel) then
     begin
       case Column of
         2: CellText := IntToHex(LData^^.Key^.KeyHash);
@@ -231,14 +231,14 @@ end;
 
 procedure TForm1.vtNodeClick(Sender: TBaseVirtualTree; const HitInfo: THitInfo);
 var
-  LData: PPStringPairRBTreeNode;
+  LData: PPRBTreeStringPairNode;
 begin
   if HitInfo.HitNode <> nil then
   begin
     LData := Sender.GetNodeData(HitInfo.HitNode);
     if LData^ <> nil then
     begin
-      if LData^ <> PStringPairRBTreeNode(FTree.Sentinel) then
+      if LData^ <> PRBTreeStringPairNode(FTree.Sentinel) then
       begin
         edtKey.Text := LData^^.Key^.Key;
         edtValue.Text := LData^^.Value;
@@ -249,14 +249,14 @@ end;
 
 procedure TForm1.vtPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
 var
-  LData: PPStringPairRBTreeNode;
+  LData: PPRBTreeStringPairNode;
 begin
   if not (vsSelected in Node^.States) then
   begin
     LData := Sender.GetNodeData(Node);
     if LData^ <> nil then
     begin
-      if LData^ = PStringPairRBTreeNode(FTree.Sentinel) then
+      if LData^ = PRBTreeStringPairNode(FTree.Sentinel) then
       begin
         TargetCanvas.Font.Color := clGray;
       end
@@ -270,10 +270,10 @@ begin
 
 end;
 
-function TForm1.GetSelectedNode: PStringPairRBTreeNode;
+function TForm1.GetSelectedNode: PRBTreeStringPairNode;
 var
   LVTNode: PVirtualNode;
-  LData: PPStringPairRBTreeNode;
+  LData: PPRBTreeStringPairNode;
 begin
   Result := nil;
   LVTNode := vt.GetFirstSelected();
@@ -285,11 +285,11 @@ begin
   end;
 end;
 
-procedure TForm1.GoNode(aNode: PStringPairRBTreeNode);
+procedure TForm1.GoNode(aNode: PRBTreeStringPairNode);
 var
   LEnu: TVTVirtualNodeEnumerator;
   LVTNode: PVirtualNode;
-  LData: PPStringPairRBTreeNode;
+  LData: PPRBTreeStringPairNode;
 begin
   LEnu := vt.Nodes().GetEnumerator;
   while LEnu.MoveNext do
@@ -308,16 +308,16 @@ end;
 
 procedure TForm1.DoUpdate;
 
-  procedure AddRBNode(aParent: PVirtualNode; aNode: PStringPairRBTreeNode);
+  procedure AddRBNode(aParent: PVirtualNode; aNode: PRBTreeStringPairNode);
   var
     LNode: PVirtualNode;
   begin
     LNode := vt.AddChild(aParent, aNode);
     if aNode^.Left <> nil then
-      AddRBNode(LNode, PStringPairRBTreeNode(aNode^.Left));
+      AddRBNode(LNode, PRBTreeStringPairNode(aNode^.Left));
 
     if aNode^.Right <> nil then
-      AddRBNode(LNode, PStringPairRBTreeNode(aNode^.Right));
+      AddRBNode(LNode, PRBTreeStringPairNode(aNode^.Right));
   end;
 
 begin

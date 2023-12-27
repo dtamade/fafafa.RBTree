@@ -142,9 +142,9 @@ var
     LRBNode: PRBTreeNode;
     LAVLNode: TAVLTreeNode;
     LTmpKey: TTreeKey;
-    LStringRBNode: PStringRBTreeNode;
-    LStringObjectRBNode: PStringObjectRBTreeNode;
-    LStringPairRBNode: PStringPairRBTreeNode;
+    LStringRBNode: PRBTreeStringNode;
+    LStringObjectRBNode: PRBTreeStringObjectNode;
+    LStringPairRBNode: PRBTreeStringPairNode;
   begin
     WriteLn('# Insert');
 

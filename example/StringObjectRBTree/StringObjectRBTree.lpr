@@ -33,9 +33,9 @@ type
 
   function GetNodeKeyValue(aNode: PRBTreeNode): TRBKeyValue;
   var
-    LNode: PStringObjectRBTreeNode;
+    LNode: PRBTreeStringObjectNode;
   begin
-    LNode := PStringObjectRBTreeNode(aNode);
+    LNode := PRBTreeStringObjectNode(aNode);
     Result.Key := LNode^.Key^.Key;
     Result.Value := TStrObject(LNode^.Value).Str + ' (' + IntToHex(LNode^.Key^.KeyHash) + ')';
   end;
@@ -43,10 +43,10 @@ type
   procedure RunExample;
   var
     LTree: IStringObjectRBTree;
-    LNode: PStringObjectRBTreeNode;
+    LNode: PRBTreeStringObjectNode;
     LPair: TTestPair;
     LTestPairLen: SizeInt;
-    LEnu: TStringObjectRBTreeNodeEnumerator;
+    LEnu: TRBTreeStringObjectNodeEnumerator;
     LIT: integer;
     LFound, i: integer;
     LP: PTestPair;

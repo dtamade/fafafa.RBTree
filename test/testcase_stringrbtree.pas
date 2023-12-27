@@ -91,7 +91,7 @@ procedure TTestCase_StringRBTree.test_Find;
 var
   LTree: TStringRBTree;
   LPair: TTestPair;
-  LNode: PStringRBTreeNode;
+  LNode: PRBTreeStringNode;
 begin
   LTree := CreateDataTree;
   for LPair in TestPairs do
@@ -107,7 +107,7 @@ procedure TTestCase_StringRBTree.test_RemoveNode;
 var
   LTree: TStringRBTree;
   LPair: TTestPair;
-  LNode: PStringRBTreeNode;
+  LNode: PRBTreeStringNode;
 begin
   LTree := CreateDataTree;
   for LPair in TestPairs do
@@ -141,7 +141,7 @@ end;
 procedure TTestCase_StringRBTree.test_Delete;
 var
   LTree: TStringRBTree;
-  LNode, LNext: PStringRBTreeNode;
+  LNode, LNext: PRBTreeStringNode;
 begin
   LTree := CreateDataTree;
   LNode := LTree.FindLowest;
@@ -159,7 +159,7 @@ procedure TTestCase_StringRBTree.test_FindSuccessor;
 var
   LTree: TStringRBTree;
   i: integer;
-  LNode: PStringRBTreeNode;
+  LNode: PRBTreeStringNode;
 begin
   LTree := CreateDataTree;
   LNode := LTree.FindLowest;
@@ -176,7 +176,7 @@ end;
 procedure TTestCase_StringRBTree.test_FindPrecessor;
 var
   LTree: TStringRBTree;
-  LNode: PStringRBTreeNode;
+  LNode: PRBTreeStringNode;
   i: integer;
 begin
   LTree := CreateDataTree;
@@ -194,7 +194,7 @@ end;
 procedure TTestCase_StringRBTree.test_FindLowest;
 var
   LTree: TStringRBTree;
-  LNode: PStringRBTreeNode;
+  LNode: PRBTreeStringNode;
 begin
   LTree := CreateDataTree;
   LNode := LTree.FindLowest;
@@ -205,7 +205,7 @@ end;
 procedure TTestCase_StringRBTree.test_FindHighest;
 var
   LTree: TStringRBTree;
-  LNode: PStringRBTreeNode;
+  LNode: PRBTreeStringNode;
 begin
   LTree := CreateDataTree;
   LNode := LTree.FindHighest;
@@ -217,8 +217,8 @@ procedure TTestCase_StringRBTree.test_Enumerator;
 var
   LTree: TStringRBTree;
   i: integer;
-  LEnu: TStringRBTreeNodeEnumerator;
-  LNode: PStringRBTreeNode;
+  LEnu: TRBTreeStringNodeEnumerator;
+  LNode: PRBTreeStringNode;
 begin
   LTree := CreateDataTree;
   i := 0;
@@ -239,7 +239,7 @@ procedure TTestCase_StringRBTree.test_Enumerator_HightToLow;
 var
   LTree: TStringRBTree;
   i: integer;
-  LEnu: TStringRBTreeNodeEnumerator;
+  LEnu: TRBTreeStringNodeEnumerator;
 begin
   LTree := CreateDataTree;
   i := 0;

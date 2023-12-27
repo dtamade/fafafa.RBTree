@@ -102,7 +102,7 @@ procedure TTestCase_StringObjectRBTree.test_Find;
 var
   LTree: TStringObjectRBTree;
   LPair: TTestPair;
-  LNode: PStringObjectRBTreeNode;
+  LNode: PRBTreeStringObjectNode;
 begin
   LTree := CreateDataTree;
   for LPair in TestPairs do
@@ -118,7 +118,7 @@ procedure TTestCase_StringObjectRBTree.test_RemoveNode;
 var
   LTree: TStringObjectRBTree;
   LPair: TTestPair;
-  LNode: PStringObjectRBTreeNode;
+  LNode: PRBTreeStringObjectNode;
 begin
   LTree := CreateDataTree;
   for LPair in TestPairs do
@@ -153,7 +153,7 @@ end;
 procedure TTestCase_StringObjectRBTree.test_Delete;
 var
   LTree: TStringObjectRBTree;
-  LNode, LNext: PStringObjectRBTreeNode;
+  LNode, LNext: PRBTreeStringObjectNode;
 begin
   LTree := CreateDataTree;
   LNode := LTree.FindLowest;
@@ -171,7 +171,7 @@ procedure TTestCase_StringObjectRBTree.test_FindSuccessor;
 var
   LTree: TStringObjectRBTree;
   i: integer;
-  LNode: PStringObjectRBTreeNode;
+  LNode: PRBTreeStringObjectNode;
 begin
   LTree := CreateDataTree;
   LNode := LTree.FindLowest;
@@ -188,7 +188,7 @@ end;
 procedure TTestCase_StringObjectRBTree.test_FindPrecessor;
 var
   LTree: TStringObjectRBTree;
-  LNode: PStringObjectRBTreeNode;
+  LNode: PRBTreeStringObjectNode;
   i: integer;
 begin
   LTree := CreateDataTree;
@@ -206,7 +206,7 @@ end;
 procedure TTestCase_StringObjectRBTree.test_FindLowest;
 var
   LTree: TStringObjectRBTree;
-  LNode: PStringObjectRBTreeNode;
+  LNode: PRBTreeStringObjectNode;
 begin
   LTree := CreateDataTree;
   LNode := LTree.FindLowest;
@@ -217,7 +217,7 @@ end;
 procedure TTestCase_StringObjectRBTree.test_FindHighest;
 var
   LTree: TStringObjectRBTree;
-  LNode: PStringObjectRBTreeNode;
+  LNode: PRBTreeStringObjectNode;
 begin
   LTree := CreateDataTree;
   LNode := LTree.FindHighest;
@@ -229,8 +229,8 @@ procedure TTestCase_StringObjectRBTree.test_Enumerator;
 var
   LTree: TStringObjectRBTree;
   i: integer;
-  LEnu: TStringObjectRBTreeNodeEnumerator;
-  LNode: PStringObjectRBTreeNode;
+  LEnu: TRBTreeStringObjectNodeEnumerator;
+  LNode: PRBTreeStringObjectNode;
 begin
   LTree := CreateDataTree;
   i := 0;
@@ -252,7 +252,7 @@ procedure TTestCase_StringObjectRBTree.test_Enumerator_HightToLow;
 var
   LTree: TStringObjectRBTree;
   i: integer;
-  LEnu: TStringObjectRBTreeNodeEnumerator;
+  LEnu: TRBTreeStringObjectNodeEnumerator;
 begin
   LTree := CreateDataTree;
   i := 0;
